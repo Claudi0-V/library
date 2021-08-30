@@ -90,3 +90,16 @@ input {
 
 /* TOP AREA ABOVE */
 
+.book-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+
+.single-book {
+  width: 200px;
+  font-size: 1.7em;
+  list-style: none;
+  
+}
