@@ -85,16 +85,20 @@ document.querySelector('.close-button').addEventListener('click', formModalModif
 
 document.querySelector('.submit-btn').addEventListener('click', e => {
   e.preventDefault()
-
   let title = document.querySelector('#title').value;
   let author = document.querySelector('#author').value;
   let pages = document.querySelector('#pages').value
   let readed = document.querySelector('#readed').checked;
-  const newBook = new createBook(title, author, pages, readed);
-  addBook(newBook)
-  myLibrary.push(newBook)
-  updateStorage()
-  formModalModifier()
+  if (title === '' || author === '' || pages === '') {
+    alert('You need to add the book info!')
+  } else {
+    const newBook = new createBook(title, author, pages, readed);
+    addBook(newBook)
+    myLibrary.push(newBook)
+    updateStorage()
+    formModalModifier()
+  }
+
 })
 
 const removeButton = document.querySelectorAll('.book-close-button');
