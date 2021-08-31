@@ -1,26 +1,15 @@
 const formModal = document.querySelector('.form-modal');
 
 // Storage
-const myLibrary = [{
-  title: "1984",
-  author: "George Orwell",
-  pages: "346",
-  readed: true,
-},
-{
-  title: "Animal Farm",
-  author: "George Orwell",
-  pages: "300",
-  readed: true,
-},{
-  title: "1984",
-  author: "George Orwell",
-  pages: "346",
-  readed: true,
-},
-];
+let myLibrary;
 
-//Functions Area
+if (!localStorage.getItem('myLibrary')) {
+  myLibrary = []
+} else {
+  myLibrary = JSON.parse(localStorage.getItem('myLibrary'))
+}
+
+const updateStorage = () => localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 
 const formModalModifier = () => {
   formModal.style.display = 'none'
@@ -60,19 +49,20 @@ const addBook = (book, index) => {
 
 const libraryUpdate = () => myLibrary.forEach((book, index) => addBook(book, index));
 
-
-const findIndex = (e) => {
+const findIndex = (childNodes) => {
+  let indexFinded
   myLibrary.forEach((book, index) => {
-  let title = e[0].textContent === `Title: ${book.title}`;
-  let author = e[1].textContent === `Author: ${book.author}`;
-  let bookAutor = `Title: ${book.author}`
-  if(title && author) return index
+    let title = childNodes[1].textContent === `Title: ${book.title}`;
+    let author = childNodes[2].textContent === `Author: ${book.author}`;
+    if(title && author) return indexFinded = index;
   })
+  return indexFinded;
 }
 
 const removeFromArray = (e) => {
-  let index = findIndex(e);
-  myLibrary.splice(index, 1);
+  let removeIndex = findIndex(e);
+  console.log(removeIndex)
+  myLibrary.splice(removeIndex, 1);
 }
 
 // Events
@@ -90,18 +80,20 @@ document.querySelector('.submit-btn').addEventListener('click', e => {
   formModalModifier()
 })
 
-
-
 const removeButton = document.querySelectorAll('.book-close-button');
 
 removeButton.forEach(button => button.addEventListener('click', (e) => {
   e.target.parentElement.remove();
   removeFromArray(e.target.parentElement.childNodes);
-
+  updateStorage()
 }))
 
 const changeButton = document.querySelectorAll('.change-status');
 
 changeButton.forEach(button => button.addEventListener('click', (e) => {
-  e.target.parentElement.childNodes
+  let index = findIndex(e.target.parentElement.childNodes);
+  let readedValue = e.target.parentElement.childNodes[4].textContent.split(' ')[1];
+  let inverseBool = readedValue === 'Yes' ? 'Readed: No' : 'Readed: Yes';
+  e.target.parentElement.childNodes[4].textContent = inverseBool
+  myLibrary[index].readed = !myLibrary[index].readed;
 }))
