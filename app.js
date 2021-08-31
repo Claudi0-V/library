@@ -26,7 +26,16 @@ const changeIfBool = (camp) => {
 
 const firstToUpperCase = srt => srt.charAt(0).toUpperCase() + srt.slice(1)
 
-const addBook = (book, index) => {
+
+function createBook(title, author, pages, readed) {
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.readed = readed;
+}
+
+
+const addBook = (book) => {
   const thisBook = document.querySelector('.book-list');
   const deleteButton = document.createElement('button');
   const xDiv = document.createElement('div');
@@ -61,7 +70,6 @@ const findIndex = (childNodes) => {
 
 const removeFromArray = (e) => {
   let removeIndex = findIndex(e);
-  console.log(removeIndex)
   myLibrary.splice(removeIndex, 1);
 }
 
@@ -77,6 +85,15 @@ document.querySelector('.close-button').addEventListener('click', formModalModif
 
 document.querySelector('.submit-btn').addEventListener('click', e => {
   e.preventDefault()
+
+  let title = document.querySelector('#title').value;
+  let author = document.querySelector('#author').value;
+  let pages = document.querySelector('#pages').value
+  let readed = document.querySelector('#readed').checked;
+  const newBook = new createBook(title, author, pages, readed);
+  addBook(newBook)
+  myLibrary.push(newBook)
+  updateStorage()
   formModalModifier()
 })
 
