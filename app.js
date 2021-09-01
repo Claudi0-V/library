@@ -4,7 +4,7 @@ const formModal = document.querySelector('.form-modal');
 let myLibrary;
 
 if (!localStorage.getItem('myLibrary')) {
-  myLibrary = []
+  myLibrary = [{title: "1984", author: "Orwell", pages: "320", readed: true}]
 } else {
   myLibrary = JSON.parse(localStorage.getItem('myLibrary'))
 }
@@ -26,14 +26,12 @@ const changeIfBool = (camp) => {
 
 const firstToUpperCase = srt => srt.charAt(0).toUpperCase() + srt.slice(1)
 
-
 function createBook(title, author, pages, readed) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.readed = readed;
 }
-
 
 const addBook = (book) => {
   const thisBook = document.querySelector('.book-list');
@@ -74,7 +72,6 @@ const removeFromArray = (e) => {
 }
 
 // Events
-
 libraryUpdate()
 
 document.querySelector('.new-book-btn').addEventListener('click', e => {
@@ -98,11 +95,9 @@ document.querySelector('.submit-btn').addEventListener('click', e => {
     updateStorage()
     formModalModifier()
   }
-
 })
 
 const removeButton = document.querySelectorAll('.book-close-button');
-
 removeButton.forEach(button => button.addEventListener('click', (e) => {
   e.target.parentElement.remove();
   removeFromArray(e.target.parentElement.childNodes);
@@ -110,7 +105,6 @@ removeButton.forEach(button => button.addEventListener('click', (e) => {
 }))
 
 const changeButton = document.querySelectorAll('.change-status');
-
 changeButton.forEach(button => button.addEventListener('click', (e) => {
   let index = findIndex(e.target.parentElement.childNodes);
   let readedValue = e.target.parentElement.childNodes[4].textContent.split(' ')[1];
