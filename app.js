@@ -1,7 +1,5 @@
 const formModal = document.querySelector('.form-modal');
 
-//book
-
 class Book {
 
   constructor(title, author, pages, readed) {
@@ -11,8 +9,6 @@ class Book {
   this.readed = readed;
   }
 }
-
-// Storage
 
 class Library {
 
@@ -24,7 +20,7 @@ class Library {
     return myLibrary;
   }
 
-  static updateStorage = (library) => localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+  static updateStorage = (library) => localStorage.setItem('myLibrary', JSON.stringify(library));
   static addBook (book) {
     const myLibrary = Library.openLibrary();
     myLibrary.push(book);
@@ -40,19 +36,34 @@ class Library {
       if(title && author) return indexFinded = index;
     })
     return indexFinded;
-}
-
+  }
+  
   static removeFromArray = (e) => {
     let removeIndex = Library.findIndex(e);
     const myLibrary = Library.openLibrary();
     myLibrary.splice(removeIndex, 1);
     Library.updateStorage(myLibrary); 
   }
+
+  static changeReaded = (index) => {
+    const myLibrary = Library.openLibrary();
+    myLibrary[index].readed = !myLibrary[index].readed
+    Library.updateStorage(myLibrary)
+  }
 }
 
-// display
-
 class Display {
+
+  static changeIfBool = (camp) => {
+    if ( typeof camp === 'boolean') {
+      if (camp) return 'Yes';
+      return 'No;' 
+  }
+    return camp;
+  }
+
+  static firstToUpperCase = srt => srt.charAt(0).toUpperCase() + srt.slice(1);
+
   static formModalModifier = () => {
   formModal.style.display = 'none'
   document.querySelector('.book-form').reset()
@@ -71,8 +82,8 @@ class Display {
     ul.appendChild(xDiv);
     for (let camp in book) {
       const li = document.createElement('li');
-      let newBookCamp = changeIfBool(book[camp]);
-      li.textContent = firstToUpperCase(`${camp}: ${newBookCamp}`);
+      let newBookCamp = Display.changeIfBool(book[camp]);
+      li.textContent = Display.firstToUpperCase(`${camp}: ${newBookCamp}`);
       ul.appendChild(li);
     }
     ul.appendChild(deleteButton);
@@ -80,22 +91,13 @@ class Display {
   }
 }
 
-
-const changeIfBool = (camp) => {
-  if ( typeof camp === 'boolean') {
-    if (camp) return 'Yes';
-    return 'No;' 
-}
-  return camp;
-}
-
-const firstToUpperCase = srt => srt.charAt(0).toUpperCase() + srt.slice(1)
 const libraryUpdate = () => Library.openLibrary().forEach((book, index) => Display.addBook(book, index));
-
 
 
 // Events
 libraryUpdate()
+
+
 
 document.querySelector('.new-book-btn').addEventListener('click', e => {
   formModal.style.display = 'flex'
@@ -131,5 +133,6 @@ changeButton.forEach(button => button.addEventListener('click', (e) => {
   let readedValue = e.target.parentElement.childNodes[4].textContent.split(' ')[1];
   let inverseBool = readedValue === 'Yes' ? 'Readed: No' : 'Readed: Yes';
   e.target.parentElement.childNodes[4].textContent = inverseBool
-  myLibrary[index].readed = !myLibrary[index].readed;
+  Library.changeReaded(index);
+  
 }))
