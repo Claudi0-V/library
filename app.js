@@ -1,16 +1,37 @@
 const formModal = document.querySelector('.form-modal');
 
-// Storage
-let myLibrary;
 
-if (!localStorage.getItem('myLibrary')) {
-  myLibrary = [{title: "1984", author: "Orwell", pages: "320", readed: true}]
-} else {
-  myLibrary = JSON.parse(localStorage.getItem('myLibrary'))
+// Storage
+
+class Library {
+
+  static openLibrary = () => {
+    let myLibrary;
+    if (!localStorage.getItem('myLibrary')) {
+    myLibrary = [{title: "1984", author: "Orwell", pages: "320", readed: true}]
+    } else myLibrary = JSON.parse(localStorage.getItem('myLibrary'));
+    return myLibrary;
+  }
+
+  static updateStorage = () => localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 }
 
-const updateStorage = () => localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 
+// display
+
+//book
+
+class Book {
+
+  constructor(title, author, pages, readed) {
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.readed = readed;
+  }
+}
+
+//
 const formModalModifier = () => {
   formModal.style.display = 'none'
   document.querySelector('.book-form').reset()
@@ -25,13 +46,6 @@ const changeIfBool = (camp) => {
 }
 
 const firstToUpperCase = srt => srt.charAt(0).toUpperCase() + srt.slice(1)
-
-function createBook(title, author, pages, readed) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.readed = readed;
-}
 
 const addBook = (book) => {
   const thisBook = document.querySelector('.book-list');
@@ -54,7 +68,7 @@ const addBook = (book) => {
   thisBook.appendChild(ul); 
 }
 
-const libraryUpdate = () => myLibrary.forEach((book, index) => addBook(book, index));
+const libraryUpdate = () => Library.openLibrary().forEach((book, index) => addBook(book, index));
 
 const findIndex = (childNodes) => {
   let indexFinded
@@ -89,7 +103,7 @@ document.querySelector('.submit-btn').addEventListener('click', e => {
   if (title === '' || author === '' || pages === '') {
     alert('You need to add the book info!')
   } else {
-    const newBook = new createBook(title, author, pages, readed);
+    const newBook = new Book(title, author, pages, readed);
     addBook(newBook)
     myLibrary.push(newBook)
     updateStorage()
