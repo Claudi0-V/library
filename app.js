@@ -57,7 +57,7 @@ class Display {
   static changeIfBool = (camp) => {
     if ( typeof camp === 'boolean') {
       if (camp) return 'Yes';
-      return 'No;' 
+      return 'No' 
   }
     return camp;
   }
@@ -74,7 +74,10 @@ class Display {
   let inverseBool = readedValue === 'Yes' ? 'Readed: No' : 'Readed: Yes';
   e.target.parentElement.childNodes[4].textContent = inverseBool
 }
-
+  static removeButtonFnc = (e) => {
+  e.target.parentElement.remove();
+  Library.removeFromArray(e.target.parentElement.childNodes);
+}
   static addBook = (book) => {
     const thisBook = document.querySelector('.book-list');
     const changeButton = document.createElement('button');
@@ -82,6 +85,10 @@ class Display {
     const ul = document.createElement('ul');
     xDiv.textContent = '+';
     xDiv.classList.add('book-close-button');
+    xDiv.onclick = (e) => {
+      Display.removeButtonFnc(e)
+      Library.removeFromArray(e);
+    }
     changeButton.textContent = 'Change Read Status';
     changeButton.onclick = (e) => {
       let index = Library.findIndex(e.target.parentElement.childNodes);
@@ -131,11 +138,4 @@ document.querySelector('.submit-btn').addEventListener('click', e => {
     Display.formModalModifier()
   }
 })
-
-const removeButton = document.querySelectorAll('.book-close-button');
-removeButton.forEach(button => button.addEventListener('click', (e) => {
-  e.target.parentElement.remove();
-  Library.removeFromArray(e.target.parentElement.childNodes);
-}))
-
 
