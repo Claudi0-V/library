@@ -69,15 +69,27 @@ class Display {
   document.querySelector('.book-form').reset()
   }
 
+  static changeButtonFunc = (e, index) => {
+  let readedValue = e.target.parentElement.childNodes[4].textContent.split(' ')[1];
+  let inverseBool = readedValue === 'Yes' ? 'Readed: No' : 'Readed: Yes';
+  e.target.parentElement.childNodes[4].textContent = inverseBool
+}
+
   static addBook = (book) => {
     const thisBook = document.querySelector('.book-list');
-    const deleteButton = document.createElement('button');
+    const changeButton = document.createElement('button');
     const xDiv = document.createElement('div');
     const ul = document.createElement('ul');
     xDiv.textContent = '+';
     xDiv.classList.add('book-close-button');
-    deleteButton.textContent = 'Change Read Status';
-    deleteButton.classList.add('change-status', 'modal-buttons');
+    changeButton.textContent = 'Change Read Status';
+    changeButton.onclick = (e) => {
+      let index = Library.findIndex(e.target.parentElement.childNodes);
+      Display.changeButtonFunc(e);
+      Library.changeReaded(index); 
+    };
+    changeButton.classList.add('change-status', 'modal-buttons');
+
     ul.classList.add('single-book')
     ul.appendChild(xDiv);
     for (let camp in book) {
@@ -86,16 +98,15 @@ class Display {
       li.textContent = Display.firstToUpperCase(`${camp}: ${newBookCamp}`);
       ul.appendChild(li);
     }
-    ul.appendChild(deleteButton);
+    ul.appendChild(changeButton);
     thisBook.appendChild(ul); 
   }
 }
 
-const libraryUpdate = () => Library.openLibrary().forEach((book, index) => Display.addBook(book, index));
-
-
 // Events
-libraryUpdate()
+document.addEventListener("DOMContentLoaded", () => {
+  Library.openLibrary().forEach((book, index) => Display.addBook(book, index))
+});
 
 
 
@@ -127,12 +138,4 @@ removeButton.forEach(button => button.addEventListener('click', (e) => {
   Library.removeFromArray(e.target.parentElement.childNodes);
 }))
 
-const changeButton = document.querySelectorAll('.change-status');
-changeButton.forEach(button => button.addEventListener('click', (e) => {
-  let index = Library.findIndex(e.target.parentElement.childNodes);
-  let readedValue = e.target.parentElement.childNodes[4].textContent.split(' ')[1];
-  let inverseBool = readedValue === 'Yes' ? 'Readed: No' : 'Readed: Yes';
-  e.target.parentElement.childNodes[4].textContent = inverseBool
-  Library.changeReaded(index);
-  
-}))
+
