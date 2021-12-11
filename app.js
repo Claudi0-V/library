@@ -20,8 +20,7 @@ class Library {
         return myLibrary;
     };
 
-    static updateStorage = (library) =>
-        localStorage.setItem("myLibrary", JSON.stringify(library));
+    static updateStorage = (library) => localStorage.setItem("myLibrary", JSON.stringify(library));
 
     static addBook(book) {
         const myLibrary = Library.openLibrary();
@@ -40,8 +39,8 @@ class Library {
         return indexFinded;
     };
 
-    static removeFromArray = (e) => {
-        let removeIndex = Library.findIndex(e);
+    static removeFromArray = (event) => {
+        let removeIndex = Library.findIndex(event);
         const myLibrary = Library.openLibrary();
         myLibrary.splice(removeIndex, 1);
         Library.updateStorage(myLibrary);
@@ -70,14 +69,14 @@ class Display {
         document.querySelector(".book-form").reset();
     };
 
-    static changeButtonFunc = (e) => {
+    static changeButtonFunc = (event) => {
         let readedValue =
-            e.target.parentElement.childNodes[4].textContent.split(" ")[1];
+            event.target.parentElement.childNodes[4].textContent.split(" ")[1];
         let inverseBool = readedValue === "Yes" ? "Readed: No" : "Readed: Yes";
-        e.target.parentElement.childNodes[4].textContent = inverseBool;
+        event.target.parentElement.childNodes[4].textContent = inverseBool;
     };
-    static removeButtonFnc = (e) => {
-        e.target.parentElement.remove();
+    static removeButtonFnc = (event) => {
+        event.target.parentElement.remove();
         Library.removeFromArray(e.target.parentElement.childNodes);
     };
     static addBook = (book) => {
@@ -87,14 +86,14 @@ class Display {
         const ul = document.createElement("ul");
         xDiv.textContent = "+";
         xDiv.classList.add("book-close-button");
-        xDiv.onclick = (e) => {
-            Display.removeButtonFnc(e);
-            Library.removeFromArray(e);
+        xDiv.onclick = (event) => {
+            Display.removeButtonFnc(event);
+            Library.removeFromArray(event);
         };
         changeButton.textContent = "Change Read Status";
-        changeButton.onclick = (e) => {
-            let index = Library.findIndex(e.target.parentElement.childNodes);
-            Display.changeButtonFunc(e);
+        changeButton.onclick = (event) => {
+            let index = Library.findIndex(event.target.parentElement.childNodes);
+            Display.changeButtonFunc(event);
             Library.changeReaded(index);
         };
         changeButton.classList.add("change-status", "modal-buttons");
@@ -125,8 +124,8 @@ document
     .querySelector(".close-button")
     .addEventListener("click", Display.formModalModifier);
 
-document.querySelector(".submit-btn").addEventListener("click", (e) => {
-    e.preventDefault();
+document.querySelector(".submit-btn").addEventListener("click", (event) => {
+    event.preventDefault();
     let title = document.querySelector("#title").value;
     let author = document.querySelector("#author").value;
     let pages = document.querySelector("#pages").value;
